@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?><ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="1.1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity>
+      <ID>DemoReg.Windows.Computer.Extended</ID>
+      <Version>1.0.0.0</Version>
+    </Identity>
+    <Name>DemoReg.Windows.Computer.Extended</Name>
+    <References>
+      <Reference Alias="System">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>	
+      <Reference Alias="Windows">
+        <ID>Microsoft.Windows.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="SC">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8427.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Health">
+        <ID>System.Health.Library</ID>
+        <Version>7.0.8427.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>	  
+      <Reference Alias="MSIGL">
+        <ID>Microsoft.SystemCenter.InstanceGroup.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>	  
+    </References>
+  </Manifest>
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="DemoReg.Windows.Computer.Extended.Class" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.Computer" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="TIER" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="GROUPID" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="OWNER" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+      </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="DemoReg.Windows.Computer.Extended.Class.Discovery" Target="Windows!Microsoft.Windows.Server.OperatingSystem" Enabled="true" ConfirmDelivery="false" Remotable="false" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="DemoReg.Windows.Computer.Extended.Class">
+            <Property TypeID="DemoReg.Windows.Computer.Extended.Class" PropertyID="TIER" />
+            <Property TypeID="DemoReg.Windows.Computer.Extended.Class" PropertyID="GROUPID" />
+            <Property TypeID="DemoReg.Windows.Computer.Extended.Class" PropertyID="OWNER" />
+          </DiscoveryClass>
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition>
+              <AttributeName>ContosoExists</AttributeName>
+              <Path>SOFTWARE\Contoso</Path>
+              <PathType>0</PathType>
+              <AttributeType>0</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>TIER</AttributeName>
+              <Path>SOFTWARE\Contoso\TIER</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>GROUPID</AttributeName>
+              <Path>SOFTWARE\Contoso\GROUPID</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>OWNER</AttributeName>
+              <Path>SOFTWARE\Contoso\OWNER</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>			
+          </RegistryAttributeDefinitions>
+		  <Frequency>86400</Frequency>
+          <ClassId>$MPElement[Name="DemoReg.Windows.Computer.Extended.Class"]$</ClassId>
+          <InstanceSettings>
+            <Settings>
+              <Setting>
+                <Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name>
+                <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+			  <Setting>
+                <Name>$MPElement[Name="DemoReg.Windows.Computer.Extended.Class"]/TIER$</Name>
+                <Value>$Data/Values/TIER$</Value>
+              </Setting>
+			  <Setting>
+                <Name>$MPElement[Name="DemoReg.Windows.Computer.Extended.Class"]/GROUPID$</Name>
+                <Value>$Data/Values/GROUPID$</Value>
+              </Setting>
+			  <Setting>
+                <Name>$MPElement[Name="DemoReg.Windows.Computer.Extended.Class"]/OWNER$</Name>
+                <Value>$Data/Values/OWNER$</Value>
+              </Setting>			  
+            </Settings>
+          </InstanceSettings>
+          <Expression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="Boolean">Values/ContosoExists</XPathQuery>
+              </ValueExpression>
+              <Operator>Equal</Operator>
+              <ValueExpression>
+                <Value Type="Boolean">true</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </Expression>		  
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="false">
+      <DisplayStrings>
+        <DisplayString ElementID="DemoReg.Windows.Computer.Extended">
+          <Name>DemoReg Windows Computer Extended MP</Name>
+        </DisplayString>
+        <DisplayString ElementID="DemoReg.Windows.Computer.Extended.Class">
+          <Name>DemoReg Windows Computer Extended Class</Name>
+        </DisplayString>
+        <DisplayString ElementID="DemoReg.Windows.Computer.Extended.Class" SubElementID="TIER">
+          <Name>TIER</Name>
+        </DisplayString>
+        <DisplayString ElementID="DemoReg.Windows.Computer.Extended.Class" SubElementID="GROUPID">
+          <Name>GROUPID</Name>
+        </DisplayString>
+        <DisplayString ElementID="DemoReg.Windows.Computer.Extended.Class" SubElementID="OWNER">
+          <Name>OWNER</Name>
+        </DisplayString>		
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>
